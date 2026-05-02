@@ -1,0 +1,106 @@
+name: CI / Release
+
+on:
+  push:
+    branches: [main]
+    tags:     ["v*.*.*"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ──────────────────────────────────────────────────────────────────────────
+  test:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ -v \
+            --cov=main \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --tb=short
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        if: matrix.python-version == '3.12'
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false
+
+  # ──────────────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Run ruff
+        run: ruff check main.py tests/
+
+  # ──────────────────────────────────────────────────────────────────────────
+  release:
+    name: Release
+    needs: [test, lint]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name:     "passgen ${{ steps.version.outputs.VERSION }}"
+          body: |
+            ## O que há de novo
+
+            Consulte o histórico de commits para detalhes.
+
+            ## Instalação
+
+            ```bash
+            git clone https://github.com/${{ github.repository }}.git
+            cd passgen
+            pip install -r requirements.txt
+            python main.py --help
+            ```
+          files: |
+            main.py
+            requirements.txt
+            README.md
