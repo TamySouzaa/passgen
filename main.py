@@ -11,7 +11,7 @@ import re
 import secrets
 import string
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 
@@ -185,14 +185,22 @@ def analyze_strength(password: str) -> StrengthReport:
     has_digit  = bool(re.search(r"\d",    password))
     has_symbol = bool(re.search(r"[^A-Za-z0-9]", password))
 
-    if has_upper:  pool += 26
-    else:          suggestions.append("Adicione letras maiúsculas.")
-    if has_lower:  pool += 26
-    else:          suggestions.append("Adicione letras minúsculas.")
-    if has_digit:  pool += 10
-    else:          suggestions.append("Adicione dígitos numéricos.")
-    if has_symbol: pool += 32
-    else:          suggestions.append("Adicione símbolos especiais.")
+    if has_upper:
+        pool += 26
+    else:
+        suggestions.append("Adicione letras maiúsculas.")
+    if has_lower:
+        pool += 26
+    else:
+        suggestions.append("Adicione letras minúsculas.")
+    if has_digit:
+        pool += 10
+    else:
+        suggestions.append("Adicione dígitos numéricos.")
+    if has_symbol:
+        pool += 32
+    else:
+        suggestions.append("Adicione símbolos especiais.")
 
     if length < 8:
         suggestions.append("Use pelo menos 8 caracteres.")
@@ -220,7 +228,7 @@ def analyze_strength(password: str) -> StrengthReport:
         (80, "Forte 🟢"),
         (101, "Muito Forte 💪"),
     ]
-    label = next(l for threshold, l in labels if score < threshold)
+    label = next(label for threshold, label in labels if score < threshold)
 
     return StrengthReport(
         score=score,

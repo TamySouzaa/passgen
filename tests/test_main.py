@@ -4,7 +4,6 @@ Executar: pytest tests/ -v --cov=main --cov-report=term-missing
 """
 
 import json
-import re
 import string
 import sys
 from unittest.mock import patch
@@ -362,7 +361,7 @@ class TestCLI:
 
     def test_count_generates_multiple(self, capsys):
         main(["-q", "-n", "5"])
-        lines = [l for l in capsys.readouterr().out.strip().splitlines() if l]
+        lines = [line for line in capsys.readouterr().out.strip().splitlines() if line]
         assert len(lines) == 5
 
     def test_json_output_structure(self, capsys):
