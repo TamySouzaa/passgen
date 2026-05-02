@@ -15,7 +15,7 @@ O **PassGen** resolve isso com uma interface de linha de comando simples e diret
 
 O projeto segue uma arquitetura modular:
 
-- **API**: Interface REST construída com FastAPI.
+- **CLI**: Interface de linha de comando construída em Python.
 - **Core**: Lógica de geração e validação de senhas.
 - **Testes**: Cobertura automatizada com pytest.
 
