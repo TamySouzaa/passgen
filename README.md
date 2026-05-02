@@ -13,7 +13,7 @@ O **PassGen** resolve isso com uma interface de linha de comando simples e diret
 
 ## Arquitetura
 
-O projeto segue uma arquitetura modular:
+O projeto é organizado em três módulos principais:
 
 - **CLI**: Interface de linha de comando construída em Python.
 - **Core**: Lógica de geração e validação de senhas.
