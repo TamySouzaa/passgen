@@ -1,10 +1,6 @@
 # Análise de Riscos
 ## PassGen — Gerador de Senhas Seguras
-*Módulo 9 — Gerenciamento de Riscos com apoio de IA Generativa*
 
----
-
-**Repositório:** [https://github.com/TamySouzaa/passgen](https://github.com/TamySouzaa/passgen)
 
 **Cenário:** Projeto próprio — MVP de uma ferramenta CLI em Python para geração de senhas aleatórias, seguras e personalizáveis, com validações e testes automatizados via pytest.
 
