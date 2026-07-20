@@ -1,32 +1,52 @@
-Análise de Riscos
-PassGen — Gerador de Senhas Seguras
+# Análise de Riscos
+## PassGen — Gerador de Senhas Seguras
+*Módulo 9 — Gerenciamento de Riscos com apoio de IA Generativa*
 
-Cenário: Projeto próprio — MVP de uma ferramenta CLI em Python para geração de senhas aleatórias, seguras e personalizáveis, com validações e testes automatizados via pytest.
+---
 
-Principais Riscos Identificados
-* Risco	Descrição	Severidade	Prob.
-* Lógica de entropia incompleta	Geração de senhas não cobre todos os padrões fracos (ex: sequências previsíveis), resultando em senhas "aleatórias" porém fracas na prática.	🔴 Crítico	Alta
-* Validação de entrada insuficiente	Parâmetros extremos (ex: tamanho até 1.000.000 de caracteres) podem expor falhas de validação e travar a aplicação.	🟠 Alto	Média
-* Cobertura de testes com gaps	Nem todo teste gerado por IA passou de primeira; o caso test_repeated_chars_penalized exigiu ajuste manual.	🟡 Médio	Média
-* Exposição de dados sensíveis	Necessidade de manter variáveis sensíveis fora do código-fonte (via .env) para evitar vazamento acidental.	🟡 Médio	Baixa
-* Estratégia de Resposta Priorizada
+**Repositório:** [https://github.com/TamySouzaa/passgen](https://github.com/TamySouzaa/passgen)
 
-Mitigar — Revisão de Entropia + Validação de Entrada
-Por quê: ataca diretamente o risco mais crítico do projeto — uma senha "gerada com segurança" que na verdade é previsível compromete o propósito central da ferramenta.
+**Cenário:** Projeto próprio — MVP de uma ferramenta CLI em Python para geração de senhas aleatórias, seguras e personalizáveis, com validações e testes automatizados via pytest.
 
-Ações:
+---
 
-*  Revisar e reforçar a lógica de entropia para cobrir padrões fracos conhecidos (sequências, repetições)
-*  Adicionar validação explícita de limites de entrada (tamanho mínimo/máximo, combinações inválidas de flags)
-*  Expandir testes de borda (edge cases) além dos sugeridos inicialmente pela IA
-*  Resultado esperado: redução do risco de senhas fracas geradas com falsa sensação de segurança
-*  Como a IA Generativa Apoiou a Atividade
-*  Geração rápida da estrutura base do CLI em Python
-*  Automação de testes unitários com pytest
-*  Validação robusta de critérios com mensagens descritivas
-*  Sugestões de boas práticas e refatoração
-*  Limitações e Cuidados Observados
-*  A IA gerou lógica de entropia sem considerar todos os padrões fracos — validação humana foi essencial
-*  Faltou validação de entrada em alguns casos extremos, mesmo com testes gerados por IA
-*  Nem todo teste gerado passa de primeira — um deles precisou de ajuste manual
-*  Segurança não é automática — é preciso reforçar boas práticas (como uso de .env) por conta própria
+## Principais Riscos Identificados
+
+| Risco | Descrição | Severidade | Prob. |
+|---|---|---|---|
+| **Lógica de entropia incompleta** | Geração de senhas não cobre todos os padrões fracos (ex: sequências previsíveis), resultando em senhas "aleatórias" porém fracas na prática. | 🔴 Crítico | Alta |
+| **Validação de entrada insuficiente** | Parâmetros extremos (ex: tamanho até 1.000.000 de caracteres) podem expor falhas de validação e travar a aplicação. | 🟠 Alto | Média |
+| **Cobertura de testes com gaps** | Nem todo teste gerado por IA passou de primeira; o caso `test_repeated_chars_penalized` exigiu ajuste manual. | 🟡 Médio | Média |
+| **Exposição de dados sensíveis** | Necessidade de manter variáveis sensíveis fora do código-fonte (via `.env`) para evitar vazamento acidental. | 🟡 Médio | Baixa |
+
+---
+
+## Estratégia de Resposta Priorizada
+
+### Mitigar — Revisão de Entropia + Validação de Entrada
+
+**Por quê:** ataca diretamente o risco mais crítico do projeto — uma senha "gerada com segurança" que na verdade é previsível compromete o propósito central da ferramenta.
+
+**Ações:**
+- Revisar e reforçar a lógica de entropia para cobrir padrões fracos conhecidos (sequências, repetições)
+- Adicionar validação explícita de limites de entrada (tamanho mínimo/máximo, combinações inválidas de flags)
+- Expandir testes de borda (edge cases) além dos sugeridos inicialmente pela IA
+- Resultado esperado: redução do risco de senhas fracas geradas com falsa sensação de segurança
+
+---
+
+## Como a IA Generativa Apoiou a Atividade
+
+- Geração rápida da estrutura base do CLI em Python
+- Automação de testes unitários com pytest
+- Validação robusta de critérios com mensagens descritivas
+- Sugestões de boas práticas e refatoração
+
+---
+
+## Limitações e Cuidados Observados
+
+- A IA gerou lógica de entropia sem considerar todos os padrões fracos — validação humana foi essencial
+- Faltou validação de entrada em alguns casos extremos, mesmo com testes gerados por IA
+- Nem todo teste gerado passa de primeira — um deles precisou de ajuste manual
+- Segurança não é automática — é preciso reforçar boas práticas (como uso de `.env`) por conta própria
