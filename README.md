@@ -36,6 +36,33 @@ pip install -r requirements.txt
 
 ---
 
+
+## Caso de Uso Principal
+- Ator: Usuário
+- Objetivo: Gerar senha segura e personalizada
+- Fluxo: Usuário executa comando → define parâmetros → sistema gera senha → senha exibida/copiada
+- Alternativas: parâmetros inválidos, falha no clipboard, erro ao salvar arquivo
+
+
+---
+
+
+## Histórias de Usuário
+- Como usuário, quero gerar uma senha aleatória para proteger minha conta.
+- Como usuário, quero definir o tamanho da senha para atender políticas de segurança.
+- Como usuário, quero copiar a senha para o clipboard para facilitar o uso.
+
+
+---
+
+
+## Critérios de Aceitação
+- Senha deve ter no mínimo 12 caracteres.
+- Senha deve incluir letras maiúsculas, minúsculas, números e símbolos.
+- Senha deve ser diferente a cada execução.
+
+---
+
 ## Uso Básico
 
 ```bash
@@ -113,3 +140,5 @@ Este projeto foi desenvolvido com a ajuda de ferramentas de IA como Claude (Anth
 ⚠️ Faltou validação de entrada em alguns casos extremos  
 ⚠️ O teste `test_repeated_chars_penalized` precisou de ajuste manual  
 ⚠️ Segurança: variáveis sensíveis devem ser mantidas no `.env`
+
+
