@@ -104,17 +104,17 @@ O relatório em HTML estará disponível em `docs/cov_html/index.html` após a e
 
 Este projeto foi desenvolvido com a ajuda de ferramentas de IA como Claude (Anthropic), que permitiram:
 
-✨ Geração rápida da estrutura base do CLI em Python
-✨ Automação de testes unitários com pytest
-✨ Validação robusta de critérios com mensagens descritivas
-✨ Sugestões de boas práticas e refatoração
+- ✨ Geração rápida da estrutura base do CLI em Python
+- ✨ Automação de testes unitários com pytest
+- ✨ Validação robusta de critérios com mensagens descritivas
+- ✨ Sugestões de boas práticas e refatoração
 
 ## Limitações Identificadas
 
-⚠️ A IA gerou lógica de entropia sem considerar todos os padrões fracos
-⚠️ Faltou validação de entrada em alguns casos extremos
-⚠️ O teste `test_repeated_chars_penalized` precisou de ajuste manual
-⚠️ Segurança: variáveis sensíveis devem ser mantidas no `.env`
+- ⚠️ A IA gerou lógica de entropia sem considerar todos os padrões fracos
+- ⚠️ Faltou validação de entrada em alguns casos extremos
+- ⚠️ O teste `test_repeated_chars_penalized` precisou de ajuste manual
+- ⚠️ Segurança: variáveis sensíveis devem ser mantidas no `.env`
 
 ---
 
