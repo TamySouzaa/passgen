@@ -157,35 +157,37 @@ Dado o tamanho do sistema (um único processo, sem múltiplos serviços), a vis�
 
 ### Diagrama Estrutural — Containers (inspirado em C4)
 
+> **Nota técnica:** a primeira versão deste diagrama usava a sintaxe `C4Container` do Mermaid. O renderer de Mermaid usado pelo GitHub trata esse tipo de diagrama como experimental e produz um layout com setas e rótulos sobrepostos, difícil de ler. Por isso, o diagrama abaixo foi reescrito como um `flowchart` (grafo) padrão — sintaxe mais estável e com melhor suporte de layout — mantendo o mesmo nível de detalhe (containers, responsabilidades e relações) inspirado em C4.
+
 ```mermaid
-C4Container
-    title Diagrama de Containers - PassGen
+flowchart TB
+    U(["👤 Usuário"]) -->|"python main.py [opções]"| CLI
 
-    Person(user, "Usuário", "Pessoa que precisa gerar ou avaliar senhas via terminal")
+    subgraph PassGen["📦 PassGen — processo CLI único"]
+        direction TB
+        CLI["🖥️ CLI Layer\nargparse\nParseia argumentos, orquestra o fluxo,\nformata a saída (texto ou JSON)"]
+        CRIT["📋 Core – Critérios\nPasswordCriteria\nValida e normaliza regras de geração"]
+        GEN["🔑 Core – Geração\ngenerate_password()\nMonta a senha via CSPRNG + Fisher-Yates"]
+        FORCE["📊 Core – Análise de Força\nanalyze_strength()\nEntropia, score 0–100, sugestões"]
 
-    System_Boundary(passgen, "PassGen (processo CLI único)") {
-        Container(cli, "CLI Layer", "Python / argparse", "Interpreta argumentos, orquestra o fluxo e formata a saída (texto ou JSON)")
-        Container(criteria, "Core - Critérios", "Python dataclass", "Valida e normaliza regras de geração (tamanho, conjuntos, mínimos, exclusões)")
-        Container(gen, "Core - Geração", "Python / secrets", "Monta o alfabeto permitido e gera a senha com CSPRNG + Fisher-Yates")
-        Container(strength, "Core - Análise de Força", "Python / re, math", "Calcula entropia, score 0-100 e sugestões de melhoria")
-        Container(tests, "Suíte de Testes", "pytest", "Valida contratos de Critérios, Geração e Análise de Força")
-    }
+        CLI -->|"cria e valida"| CRIT
+        CLI -->|"solicita geração"| GEN
+        GEN -->|"lê alfabeto permitido"| CRIT
+        CLI -->|"envia senha p/ análise"| FORCE
+    end
 
-    System_Ext(clipboard, "Área de Transferência do SO", "Integração opcional via biblioteca pyperclip")
-    System_Ext(terminal, "Terminal / stdout", "Consome saída em texto colorido ou JSON")
-    System_Ext(ci, "GitHub Actions", "Executa a suíte de testes a cada push/PR")
+    CLI -->|"imprime resultado"| TERM["🖨️ Terminal / stdout"]
+    CLI -.->|"--copy (opcional)"| CLIP["📎 Área de Transferência do SO\n(via pyperclip)"]
 
-    Rel(user, cli, "Executa", "python main.py [opções]")
-    Rel(cli, criteria, "Cria e valida")
-    Rel(cli, gen, "Solicita geração de senha")
-    Rel(gen, criteria, "Lê alfabeto permitido")
-    Rel(cli, strength, "Envia senha para análise")
-    Rel(cli, terminal, "Imprime resultado")
-    Rel(cli, clipboard, "Copia senha (--copy)")
-    Rel(ci, tests, "Executa")
-    Rel(tests, criteria, "Testa")
-    Rel(tests, gen, "Testa")
-    Rel(tests, strength, "Testa")
+    CI["⚙️ GitHub Actions"] -.->|"executa a cada push/PR"| TESTS["✅ Suíte de Testes\npytest"]
+    TESTS -.->|"valida"| CRIT
+    TESTS -.->|"valida"| GEN
+    TESTS -.->|"valida"| FORCE
+
+    classDef container fill:#1f6feb,stroke:#0d419d,color:#fff
+    classDef external fill:#30363d,stroke:#8b949e,color:#fff
+    class CLI,CRIT,GEN,FORCE,TESTS container
+    class U,TERM,CLIP,CI external
 ```
 
 ### Diagrama Comportamental — Sequência: "Gerar senha segura via CLI"
